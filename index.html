@@ -1,0 +1,783 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Top CS Conferences — AI, ML & Beyond</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #060912;
+      --surface: #0d1321;
+      --surface2: #131929;
+      --border: rgba(255,255,255,0.07);
+      --text: #e8ecf4;
+      --muted: #6b7a99;
+
+      --ai:      #6366f1;
+      --ml:      #8b5cf6;
+      --cv:      #06b6d4;
+      --medical: #10b981;
+      --genai:   #f59e0b;
+      --nlp:     #ec4899;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ── BACKGROUND ORBS ── */
+    .bg-orbs {
+      position: fixed; inset: 0; pointer-events: none; z-index: 0;
+      overflow: hidden;
+    }
+    .orb {
+      position: absolute; border-radius: 50%;
+      filter: blur(120px); opacity: 0.18;
+      animation: drift 18s ease-in-out infinite alternate;
+    }
+    .orb1 { width: 600px; height: 600px; background: #6366f1; top: -200px; left: -200px; animation-delay: 0s; }
+    .orb2 { width: 500px; height: 500px; background: #06b6d4; bottom: -150px; right: -150px; animation-delay: -6s; }
+    .orb3 { width: 400px; height: 400px; background: #f59e0b; top: 40%; left: 40%; animation-delay: -3s; }
+
+    @keyframes drift {
+      from { transform: translate(0, 0) scale(1); }
+      to   { transform: translate(40px, 40px) scale(1.08); }
+    }
+
+    /* ── LAYOUT ── */
+    main { position: relative; z-index: 1; max-width: 1280px; margin: 0 auto; padding: 0 24px 80px; }
+
+    /* ── HERO ── */
+    .hero {
+      text-align: center;
+      padding: 90px 20px 60px;
+    }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(99,102,241,0.12);
+      border: 1px solid rgba(99,102,241,0.3);
+      border-radius: 100px;
+      padding: 6px 18px;
+      font-size: 13px; font-weight: 600; letter-spacing: .5px;
+      color: #a5b4fc;
+      margin-bottom: 28px;
+    }
+    .hero-badge span { width: 7px; height: 7px; border-radius: 50%; background: #6366f1; display: inline-block; animation: pulse 2s ease-in-out infinite; }
+    @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.5;transform:scale(.7)} }
+
+    .hero h1 {
+      font-size: clamp(2.4rem, 6vw, 4.2rem);
+      font-weight: 900;
+      line-height: 1.1;
+      letter-spacing: -1px;
+      background: linear-gradient(135deg, #fff 30%, #a5b4fc 70%, #67e8f9 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      margin-bottom: 20px;
+    }
+    .hero p {
+      font-size: 1.1rem; color: var(--muted); max-width: 560px; margin: 0 auto 48px; line-height: 1.7;
+    }
+
+    /* ── STATS ── */
+    .stats {
+      display: flex; justify-content: center; gap: 40px; flex-wrap: wrap;
+      margin-bottom: 60px;
+    }
+    .stat { text-align: center; }
+    .stat-num { font-size: 2rem; font-weight: 800; color: #fff; }
+    .stat-label { font-size: 12px; color: var(--muted); letter-spacing: .5px; margin-top: 2px; }
+
+    /* ── FILTER PILLS ── */
+    .filters {
+      display: flex; flex-wrap: wrap; gap: 10px;
+      justify-content: center;
+      margin-bottom: 48px;
+    }
+    .pill {
+      padding: 8px 20px; border-radius: 100px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      font-size: 13px; font-weight: 600;
+      cursor: pointer; transition: all .2s;
+      color: var(--muted);
+      user-select: none;
+    }
+    .pill:hover { border-color: rgba(255,255,255,0.2); color: #fff; }
+    .pill.active { color: #fff; }
+    .pill[data-cat="all"].active   { background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.25); }
+    .pill[data-cat="ai"].active    { background: rgba(99,102,241,0.2);  border-color: var(--ai);  color: #a5b4fc; }
+    .pill[data-cat="ml"].active    { background: rgba(139,92,246,0.2);  border-color: var(--ml);  color: #c4b5fd; }
+    .pill[data-cat="cv"].active    { background: rgba(6,182,212,0.2);   border-color: var(--cv);  color: #67e8f9; }
+    .pill[data-cat="medical"].active{ background: rgba(16,185,129,0.2); border-color: var(--medical); color: #6ee7b7; }
+    .pill[data-cat="genai"].active { background: rgba(245,158,11,0.2);  border-color: var(--genai); color: #fcd34d; }
+    .pill[data-cat="nlp"].active   { background: rgba(236,72,153,0.2);  border-color: var(--nlp); color: #f9a8d4; }
+
+    /* ── GRID ── */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+      gap: 24px;
+    }
+
+    /* ── CARD ── */
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 28px;
+      position: relative;
+      overflow: hidden;
+      transition: transform .25s, box-shadow .25s, border-color .25s;
+      cursor: default;
+    }
+    .card::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: var(--card-glow, transparent);
+      opacity: 0;
+      transition: opacity .3s;
+      border-radius: inherit;
+    }
+    .card:hover { transform: translateY(-5px); }
+    .card:hover::before { opacity: 1; }
+
+    .card[data-cat="ai"]      { --card-glow: radial-gradient(ellipse at top left, rgba(99,102,241,.12), transparent 60%); }
+    .card[data-cat="ml"]      { --card-glow: radial-gradient(ellipse at top left, rgba(139,92,246,.12), transparent 60%); }
+    .card[data-cat="cv"]      { --card-glow: radial-gradient(ellipse at top left, rgba(6,182,212,.12), transparent 60%); }
+    .card[data-cat="medical"] { --card-glow: radial-gradient(ellipse at top left, rgba(16,185,129,.12), transparent 60%); }
+    .card[data-cat="genai"]   { --card-glow: radial-gradient(ellipse at top left, rgba(245,158,11,.12), transparent 60%); }
+    .card[data-cat="nlp"]     { --card-glow: radial-gradient(ellipse at top left, rgba(236,72,153,.12), transparent 60%); }
+
+    .card[data-cat="ai"]:hover      { border-color: rgba(99,102,241,.5);  box-shadow: 0 20px 60px rgba(99,102,241,.15); }
+    .card[data-cat="ml"]:hover      { border-color: rgba(139,92,246,.5);  box-shadow: 0 20px 60px rgba(139,92,246,.15); }
+    .card[data-cat="cv"]:hover      { border-color: rgba(6,182,212,.5);   box-shadow: 0 20px 60px rgba(6,182,212,.15); }
+    .card[data-cat="medical"]:hover { border-color: rgba(16,185,129,.5);  box-shadow: 0 20px 60px rgba(16,185,129,.15); }
+    .card[data-cat="genai"]:hover   { border-color: rgba(245,158,11,.5);  box-shadow: 0 20px 60px rgba(245,158,11,.15); }
+    .card[data-cat="nlp"]:hover     { border-color: rgba(236,72,153,.5);  box-shadow: 0 20px 60px rgba(236,72,153,.15); }
+
+    .card-top {
+      display: flex; justify-content: space-between; align-items: flex-start;
+      margin-bottom: 16px;
+    }
+    .card-icon {
+      width: 48px; height: 48px; border-radius: 14px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 22px; flex-shrink: 0;
+    }
+    .card[data-cat="ai"]      .card-icon { background: rgba(99,102,241,.15); }
+    .card[data-cat="ml"]      .card-icon { background: rgba(139,92,246,.15); }
+    .card[data-cat="cv"]      .card-icon { background: rgba(6,182,212,.15); }
+    .card[data-cat="medical"] .card-icon { background: rgba(16,185,129,.15); }
+    .card[data-cat="genai"]   .card-icon { background: rgba(245,158,11,.15); }
+    .card[data-cat="nlp"]     .card-icon { background: rgba(236,72,153,.15); }
+
+    .tag {
+      font-size: 11px; font-weight: 700; letter-spacing: .6px;
+      padding: 4px 10px; border-radius: 100px;
+      text-transform: uppercase;
+    }
+    .card[data-cat="ai"]      .tag { background: rgba(99,102,241,.2);  color: #a5b4fc; }
+    .card[data-cat="ml"]      .tag { background: rgba(139,92,246,.2);  color: #c4b5fd; }
+    .card[data-cat="cv"]      .tag { background: rgba(6,182,212,.2);   color: #67e8f9; }
+    .card[data-cat="medical"] .tag { background: rgba(16,185,129,.2);  color: #6ee7b7; }
+    .card[data-cat="genai"]   .tag { background: rgba(245,158,11,.2);  color: #fcd34d; }
+    .card[data-cat="nlp"]     .tag { background: rgba(236,72,153,.2);  color: #f9a8d4; }
+
+    .card h2 {
+      font-size: 1.15rem; font-weight: 700; margin-bottom: 4px; color: #fff;
+    }
+    .card-full { font-size: 12px; color: var(--muted); margin-bottom: 12px; }
+
+    .card-desc {
+      font-size: 13.5px; color: #9aa3b8; line-height: 1.65; margin-bottom: 20px;
+    }
+
+    .card-meta {
+      display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 20px;
+    }
+    .meta-chip {
+      display: flex; align-items: center; gap: 5px;
+      font-size: 12px; color: var(--muted);
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 8px; padding: 5px 10px;
+    }
+    .meta-chip svg { opacity: .6; flex-shrink: 0; }
+
+    .card-footer {
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .rank {
+      font-size: 12px; font-weight: 600; color: var(--muted);
+    }
+    .rank span { color: #f59e0b; }
+
+    .visit-btn {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 12px; font-weight: 600;
+      padding: 7px 14px; border-radius: 9px;
+      text-decoration: none; transition: all .2s;
+      border: 1px solid var(--border);
+      color: var(--muted);
+      background: var(--surface2);
+    }
+    .visit-btn:hover { color: #fff; border-color: rgba(255,255,255,.2); }
+
+    .divider {
+      height: 1px; background: var(--border); margin: 56px 0 40px;
+    }
+
+    .section-title {
+      font-size: 1.5rem; font-weight: 800; margin-bottom: 8px;
+      background: linear-gradient(90deg, #fff, #9aa3b8);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    }
+    .section-sub { color: var(--muted); font-size: 14px; margin-bottom: 32px; }
+
+    .hidden { display: none !important; }
+
+    /* ── FOOTER ── */
+    footer {
+      text-align: center; color: var(--muted); font-size: 13px;
+      padding: 40px 0 24px; position: relative; z-index: 1;
+      border-top: 1px solid var(--border);
+      margin-top: 60px;
+    }
+    footer a { color: #a5b4fc; text-decoration: none; }
+    footer a:hover { text-decoration: underline; }
+
+    @media (max-width: 600px) {
+      .grid { grid-template-columns: 1fr; }
+      .hero h1 { font-size: 2rem; }
+      .stats { gap: 24px; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="bg-orbs">
+  <div class="orb orb1"></div>
+  <div class="orb orb2"></div>
+  <div class="orb orb3"></div>
+</div>
+
+<main>
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-badge"><span></span> 2025–2026 Season</div>
+    <h1>Top CS Conferences<br>in AI & Beyond</h1>
+    <p>Discover the world's most prestigious computer science conferences spanning AI, machine learning, computer vision, medical imaging, and generative AI.</p>
+
+    <div class="stats">
+      <div class="stat"><div class="stat-num">15</div><div class="stat-label">Conferences</div></div>
+      <div class="stat"><div class="stat-num">6</div><div class="stat-label">Categories</div></div>
+      <div class="stat"><div class="stat-num">A*</div><div class="stat-label">Avg CORE Rank</div></div>
+    </div>
+
+    <!-- FILTERS -->
+    <div class="filters">
+      <div class="pill active" data-cat="all">All</div>
+      <div class="pill" data-cat="ai">🤖 AI</div>
+      <div class="pill" data-cat="ml">🧠 Machine Learning</div>
+      <div class="pill" data-cat="cv">👁️ Computer Vision</div>
+      <div class="pill" data-cat="medical">🏥 Medical AI</div>
+      <div class="pill" data-cat="genai">✨ Generative AI</div>
+      <div class="pill" data-cat="nlp">💬 NLP</div>
+    </div>
+  </section>
+
+  <!-- GRID -->
+  <div class="grid" id="grid">
+
+    <!-- NeurIPS -->
+    <div class="card" data-cat="ml">
+      <div class="card-top">
+        <div class="card-icon">🧠</div>
+        <span class="tag">Machine Learning</span>
+      </div>
+      <h2>NeurIPS 2025</h2>
+      <div class="card-full">Neural Information Processing Systems</div>
+      <p class="card-desc">The flagship conference for machine learning and computational neuroscience. Home to breakthrough papers in deep learning, reinforcement learning, and AI theory.</p>
+      <div class="card-meta">
+        <div class="meta-chip">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          Dec 2025
+        </div>
+        <div class="meta-chip">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          San Diego, USA
+        </div>
+        <div class="meta-chip">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          ~15k attendees
+        </div>
+      </div>
+      <div class="card-footer">
+        <div class="rank">CORE Rank: <span>A*</span></div>
+        <a class="visit-btn" href="https://neurips.cc" target="_blank">
+          Visit ↗
+        </a>
+      </div>
+    </div>
+
+    <!-- ICML -->
+    <div class="card" data-cat="ml">
+      <div class="card-top">
+        <div class="card-icon">📐</div>
+        <span class="tag">Machine Learning</span>
+      </div>
+      <h2>ICML 2025</h2>
+      <div class="card-full">International Conference on Machine Learning</div>
+      <p class="card-desc">Premier venue for cutting-edge machine learning research. Covers optimization, probabilistic models, deep learning theory, and real-world ML systems.</p>
+      <div class="card-meta">
+        <div class="meta-chip">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          Jul 2025
+        </div>
+        <div class="meta-chip">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          Vancouver, Canada
+        </div>
+        <div class="meta-chip">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          ~14k attendees
+        </div>
+      </div>
+      <div class="card-footer">
+        <div class="rank">CORE Rank: <span>A*</span></div>
+        <a class="visit-btn" href="https://icml.cc" target="_blank">Visit ↗</a>
+      </div>
+    </div>
+
+    <!-- ICLR -->
+    <div class="card" data-cat="ml">
+      <div class="card-top">
+        <div class="card-icon">🔬</div>
+        <span class="tag">Machine Learning</span>
+      </div>
+      <h2>ICLR 2026</h2>
+      <div class="card-full">International Conference on Learning Representations</div>
+      <p class="card-desc">Dedicated to representation learning and deep learning. Known for its open-review process and high-impact papers on transformers, diffusion models, and beyond.</p>
+      <div class="card-meta">
+        <div class="meta-chip">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          Apr 2026
+        </div>
+        <div class="meta-chip">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          Singapore
+        </div>
+        <div class="meta-chip">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          ~10k attendees
+        </div>
+      </div>
+      <div class="card-footer">
+        <div class="rank">CORE Rank: <span>A*</span></div>
+        <a class="visit-btn" href="https://iclr.cc" target="_blank">Visit ↗</a>
+      </div>
+    </div>
+
+    <!-- CVPR -->
+    <div class="card" data-cat="cv">
+      <div class="card-top">
+        <div class="card-icon">👁️</div>
+        <span class="tag">Computer Vision</span>
+      </div>
+      <h2>CVPR 2025</h2>
+      <div class="card-full">IEEE/CVF Conference on Computer Vision and Pattern Recognition</div>
+      <p class="card-desc">The world's top computer vision conference. Covers object detection, image segmentation, 3D vision, video understanding, and vision-language models.</p>
+      <div class="card-meta">
+        <div class="meta-chip">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          Jun 2025
+        </div>
+        <div class="meta-chip">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          Nashville, USA
+        </div>
+        <div class="meta-chip">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          ~20k attendees
+        </div>
+      </div>
+      <div class="card-footer">
+        <div class="rank">CORE Rank: <span>A*</span></div>
+        <a class="visit-btn" href="https://cvpr.thecvf.com" target="_blank">Visit ↗</a>
+      </div>
+    </div>
+
+    <!-- ICCV -->
+    <div class="card" data-cat="cv">
+      <div class="card-top">
+        <div class="card-icon">🔭</div>
+        <span class="tag">Computer Vision</span>
+      </div>
+      <h2>ICCV 2025</h2>
+      <div class="card-full">IEEE International Conference on Computer Vision</div>
+      <p class="card-desc">Premier biennial forum for computer vision research. Highly competitive venue covering scene understanding, neural radiance fields, and embodied AI.</p>
+      <div class="card-meta">
+        <div class="meta-chip">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          Oct 2025
+        </div>
+        <div class="meta-chip">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          Honolulu, USA
+        </div>
+        <div class="meta-chip">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          ~8k attendees
+        </div>
+      </div>
+      <div class="card-footer">
+        <div class="rank">CORE Rank: <span>A*</span></div>
+        <a class="visit-btn" href="https://iccv.thecvf.com" target="_blank">Visit ↗</a>
+      </div>
+    </div>
+
+    <!-- ECCV -->
+    <div class="card" data-cat="cv">
+      <div class="card-top">
+        <div class="card-icon">🌍</div>
+        <span class="tag">Computer Vision</span>
+      </div>
+      <h2>ECCV 2026</h2>
+      <div class="card-full">European Conference on Computer Vision</div>
+      <p class="card-desc">Leading European venue for vision research. Alternates biennially with ICCV and showcases work on generative vision models, multimodal learning, and robotics perception.</p>
+      <div class="card-meta">
+        <div class="meta-chip">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          Sep 2026
+        </div>
+        <div class="meta-chip">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          TBA, Europe
+        </div>
+        <div class="meta-chip">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          ~7k attendees
+        </div>
+      </div>
+      <div class="card-footer">
+        <div class="rank">CORE Rank: <span>A*</span></div>
+        <a class="visit-btn" href="https://eccv.ecva.net" target="_blank">Visit ↗</a>
+      </div>
+    </div>
+
+    <!-- AAAI -->
+    <div class="card" data-cat="ai">
+      <div class="card-top">
+        <div class="card-icon">🤖</div>
+        <span class="tag">AI</span>
+      </div>
+      <h2>AAAI 2026</h2>
+      <div class="card-full">AAAI Conference on Artificial Intelligence</div>
+      <p class="card-desc">Broad AI conference covering planning, knowledge representation, multi-agent systems, and applied AI. One of the oldest and most respected AI venues worldwide.</p>
+      <div class="card-meta">
+        <div class="meta-chip">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          Feb 2026
+        </div>
+        <div class="meta-chip">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          Philadelphia, USA
+        </div>
+        <div class="meta-chip">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          ~12k attendees
+        </div>
+      </div>
+      <div class="card-footer">
+        <div class="rank">CORE Rank: <span>A*</span></div>
+        <a class="visit-btn" href="https://aaai.org/conference/aaai" target="_blank">Visit ↗</a>
+      </div>
+    </div>
+
+    <!-- IJCAI -->
+    <div class="card" data-cat="ai">
+      <div class="card-top">
+        <div class="card-icon">🌐</div>
+        <span class="tag">AI</span>
+      </div>
+      <h2>IJCAI 2025</h2>
+      <div class="card-full">International Joint Conference on Artificial Intelligence</div>
+      <p class="card-desc">The premier global AI conference since 1969. Spans all areas of AI including reasoning, learning, robotics, and AI ethics with an international scope.</p>
+      <div class="card-meta">
+        <div class="meta-chip">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          Aug 2025
+        </div>
+        <div class="meta-chip">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          Montreal, Canada
+        </div>
+        <div class="meta-chip">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          ~5k attendees
+        </div>
+      </div>
+      <div class="card-footer">
+        <div class="rank">CORE Rank: <span>A*</span></div>
+        <a class="visit-btn" href="https://ijcai.org" target="_blank">Visit ↗</a>
+      </div>
+    </div>
+
+    <!-- MICCAI -->
+    <div class="card" data-cat="medical">
+      <div class="card-top">
+        <div class="card-icon">🏥</div>
+        <span class="tag">Medical AI</span>
+      </div>
+      <h2>MICCAI 2025</h2>
+      <div class="card-full">Medical Image Computing and Computer Assisted Intervention</div>
+      <p class="card-desc">The foremost conference for medical image analysis and AI-driven clinical tools. Covers segmentation, detection, surgical robotics, and AI-assisted diagnosis.</p>
+      <div class="card-meta">
+        <div class="meta-chip">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          Sep 2025
+        </div>
+        <div class="meta-chip">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          Daejeon, South Korea
+        </div>
+        <div class="meta-chip">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          ~4k attendees
+        </div>
+      </div>
+      <div class="card-footer">
+        <div class="rank">CORE Rank: <span>A</span></div>
+        <a class="visit-btn" href="https://miccai.org" target="_blank">Visit ↗</a>
+      </div>
+    </div>
+
+    <!-- CHIL -->
+    <div class="card" data-cat="medical">
+      <div class="card-top">
+        <div class="card-icon">🩺</div>
+        <span class="tag">Medical AI</span>
+      </div>
+      <h2>CHIL 2025</h2>
+      <div class="card-full">Conference on Health, Inference, and Learning</div>
+      <p class="card-desc">ACM conference focused on machine learning for clinical and health data. Features clinical NLP, predictive modeling, fairness in healthcare, and EHR analysis.</p>
+      <div class="card-meta">
+        <div class="meta-chip">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          Jun 2025
+        </div>
+        <div class="meta-chip">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          Boston, USA
+        </div>
+        <div class="meta-chip">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          ~600 attendees
+        </div>
+      </div>
+      <div class="card-footer">
+        <div class="rank">Focus: <span>Clinical ML</span></div>
+        <a class="visit-btn" href="https://chilconference.org" target="_blank">Visit ↗</a>
+      </div>
+    </div>
+
+    <!-- ISBI -->
+    <div class="card" data-cat="medical">
+      <div class="card-top">
+        <div class="card-icon">🧬</div>
+        <span class="tag">Medical AI</span>
+      </div>
+      <h2>ISBI 2025</h2>
+      <div class="card-full">IEEE International Symposium on Biomedical Imaging</div>
+      <p class="card-desc">IEEE symposium dedicated to biomedical image analysis using AI and deep learning. Covers histopathology, radiology AI, microscopy, and multimodal fusion for diagnostics.</p>
+      <div class="card-meta">
+        <div class="meta-chip">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          Apr 2025
+        </div>
+        <div class="meta-chip">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          Houston, USA
+        </div>
+        <div class="meta-chip">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          ~1.5k attendees
+        </div>
+      </div>
+      <div class="card-footer">
+        <div class="rank">CORE Rank: <span>B</span></div>
+        <a class="visit-btn" href="https://biomedicalimaging.org" target="_blank">Visit ↗</a>
+      </div>
+    </div>
+
+    <!-- Generative AI Symposium -->
+    <div class="card" data-cat="genai">
+      <div class="card-top">
+        <div class="card-icon">✨</div>
+        <span class="tag">Generative AI</span>
+      </div>
+      <h2>GenAI @ NeurIPS</h2>
+      <div class="card-full">Workshop on Generative AI — NeurIPS 2025</div>
+      <p class="card-desc">The most prestigious workshop on generative modeling. Covers diffusion models, GANs, flow matching, large language models, and multimodal generation systems.</p>
+      <div class="card-meta">
+        <div class="meta-chip">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          Dec 2025
+        </div>
+        <div class="meta-chip">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          San Diego, USA
+        </div>
+        <div class="meta-chip">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          Co-located
+        </div>
+      </div>
+      <div class="card-footer">
+        <div class="rank">Type: <span>Workshop</span></div>
+        <a class="visit-btn" href="https://neurips.cc" target="_blank">Visit ↗</a>
+      </div>
+    </div>
+
+    <!-- ICLR GenAI -->
+    <div class="card" data-cat="genai">
+      <div class="card-top">
+        <div class="card-icon">🎨</div>
+        <span class="tag">Generative AI</span>
+      </div>
+      <h2>CVPR GenAI Track</h2>
+      <div class="card-full">Generative Models in Computer Vision — CVPR 2025</div>
+      <p class="card-desc">Major track within CVPR dedicated to generative AI for visual content. Covers text-to-image, video generation, 3D synthesis, and controllable generation pipelines.</p>
+      <div class="card-meta">
+        <div class="meta-chip">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          Jun 2025
+        </div>
+        <div class="meta-chip">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          Nashville, USA
+        </div>
+        <div class="meta-chip">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          Part of CVPR
+        </div>
+      </div>
+      <div class="card-footer">
+        <div class="rank">Type: <span>Main Track</span></div>
+        <a class="visit-btn" href="https://cvpr.thecvf.com" target="_blank">Visit ↗</a>
+      </div>
+    </div>
+
+    <!-- ACL -->
+    <div class="card" data-cat="nlp">
+      <div class="card-top">
+        <div class="card-icon">💬</div>
+        <span class="tag">NLP</span>
+      </div>
+      <h2>ACL 2025</h2>
+      <div class="card-full">Annual Meeting of the Association for Computational Linguistics</div>
+      <p class="card-desc">Top venue for natural language processing and computational linguistics. Central to LLM research, covering pre-training, fine-tuning, alignment, and reasoning in language models.</p>
+      <div class="card-meta">
+        <div class="meta-chip">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          Jul 2025
+        </div>
+        <div class="meta-chip">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          Vienna, Austria
+        </div>
+        <div class="meta-chip">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          ~4k attendees
+        </div>
+      </div>
+      <div class="card-footer">
+        <div class="rank">CORE Rank: <span>A*</span></div>
+        <a class="visit-btn" href="https://aclanthology.org" target="_blank">Visit ↗</a>
+      </div>
+    </div>
+
+    <!-- EMNLP -->
+    <div class="card" data-cat="nlp">
+      <div class="card-top">
+        <div class="card-icon">📝</div>
+        <span class="tag">NLP</span>
+      </div>
+      <h2>EMNLP 2025</h2>
+      <div class="card-full">Conference on Empirical Methods in Natural Language Processing</div>
+      <p class="card-desc">Leading NLP conference focused on empirical methods and experiments. Key venue for LLM evaluation, retrieval-augmented generation, and multilingual AI research.</p>
+      <div class="card-meta">
+        <div class="meta-chip">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          Nov 2025
+        </div>
+        <div class="meta-chip">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          TBA
+        </div>
+        <div class="meta-chip">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          ~5k attendees
+        </div>
+      </div>
+      <div class="card-footer">
+        <div class="rank">CORE Rank: <span>A*</span></div>
+        <a class="visit-btn" href="https://aclanthology.org" target="_blank">Visit ↗</a>
+      </div>
+    </div>
+
+  </div><!-- /grid -->
+</main>
+
+<footer>
+  <p>Curated for researchers in AI, ML, Computer Vision & Medical Imaging &nbsp;•&nbsp; <a href="#">2025–2026 Edition</a></p>
+  <p style="margin-top:8px;font-size:11px;opacity:.5;">Conference dates are subject to change. Always verify on the official website.</p>
+</footer>
+
+<script>
+  const pills = document.querySelectorAll('.pill');
+  const cards = document.querySelectorAll('.card');
+
+  pills.forEach(pill => {
+    pill.addEventListener('click', () => {
+      pills.forEach(p => p.classList.remove('active'));
+      pill.classList.add('active');
+
+      const cat = pill.dataset.cat;
+      cards.forEach(card => {
+        if (cat === 'all' || card.dataset.cat === cat) {
+          card.classList.remove('hidden');
+          card.style.animation = 'none';
+          requestAnimationFrame(() => {
+            card.style.animation = 'fadeIn .35s ease forwards';
+          });
+        } else {
+          card.classList.add('hidden');
+        }
+      });
+    });
+  });
+
+  // fade-in on load
+  const style = document.createElement('style');
+  style.textContent = `@keyframes fadeIn { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:none} }`;
+  document.head.appendChild(style);
+
+  cards.forEach((card, i) => {
+    card.style.opacity = '0';
+    card.style.animation = `fadeIn .5s ease ${i * 0.05}s forwards`;
+  });
+</script>
+</body>
+</html>
